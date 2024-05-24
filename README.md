@@ -8,7 +8,8 @@ Make a frontend-only todo list app.
 
 - It has three vertical lists. **Todo**, **Doing**, and **Done**
 - Make a fetch call to the Rick and Morty GraphQL API: https://rickandmortyapi.com/graphql.  
-- Items are created via a form (they can be stored in local state, no need to have a backend). - Each item in your list must have a character assigned to it.
+- Items are created via a form (they can be stored in local state, no need to have a backend).
+- Each item in your list must have a character assigned to it.
 - Items are draggable from one list to another.
 - Items can be reordered within a list
 - When you drag an item into the Done list, confetti explodes on the screen! Or something else interesting. You can use a package for this.

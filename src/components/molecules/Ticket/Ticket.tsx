@@ -4,13 +4,14 @@ import { CSS } from "@dnd-kit/utilities";
 import Image from "next/image";
 import { TTicketProps } from "./types";
 
-const Ticket = ({ ticket }: TTicketProps): React.ReactNode => {
+const Ticket = (props: TTicketProps): React.ReactNode => {
+  const ticket = props.ticket;
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({ id: ticket.id });
 
   const style = {
     transform: CSS.Transform.toString(transform),
-    transition,
+    transition
   };
 
   return (

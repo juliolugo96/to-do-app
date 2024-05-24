@@ -98,10 +98,6 @@ export default function BoardsContainer(): React.ReactNode {
         // We're at the root droppable of a container
         newIndex = prev[overContainer].length + 1;
       } else {
-        console.log("Rect top, rect height:", {
-          top: over?.rect.top,
-          height: over?.rect.height,
-        });
         const isBelowLastItem =
           over &&
           active.rect.current.translated &&
@@ -123,7 +119,6 @@ export default function BoardsContainer(): React.ReactNode {
           {
             ...boards[activeContainer][activeIndex],
             board: overContainer,
-            dragged: true,
           },
           ...prev[overContainer].slice(newIndex, prev[overContainer].length),
         ],

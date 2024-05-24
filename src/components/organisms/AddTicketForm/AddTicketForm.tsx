@@ -35,10 +35,8 @@ const AddTicketForm = ({
   // --- END: Side effects -----------------------------------------------------
 
   // --- Data and handlers -----------------------------------------------------
-  const handleSelect = (newValue: SingleValue<TOption | null>) => {
-    console.log(newValue);
+  const handleSelect = (newValue: SingleValue<TOption | null>) =>
     setOption(newValue);
-  };
 
   const handleFetch = async () => {
     const items = await fetchCharacters();
@@ -48,7 +46,7 @@ const AddTicketForm = ({
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent): void => {
     e.preventDefault();
     onSubmit(option?.value as ITicket);
   };
