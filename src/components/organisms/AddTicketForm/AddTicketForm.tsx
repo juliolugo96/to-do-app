@@ -6,11 +6,14 @@ import { useLazyQuery } from "@apollo/client";
 import { CHARACTERS_QUERY } from "@/lib/queries";
 import Image from "next/image";
 import { ITicket } from "@/components/templates/BoardsContainer/types";
+import { SingleValue } from "react-select";
+
+type TOption = { value: ITicket; label: string };
 
 const AddTicketForm = ({
   onSubmit,
 }: {
-  onSubmit: () => {};
+  onSubmit: (item: ITicket) => void;
 }): React.ReactNode => {
   // --- Hooks -----------------------------------------------------------------
   const [fetchCharacters, { loading, error, data }] =
@@ -19,7 +22,7 @@ const AddTicketForm = ({
   // --- END: Hooks ------------------------------------------------------------
 
   // --- Local state -----------------------------------------------------------
-  const [option, setOption] = useState(null);
+  const [option, setOption] = useState<TOption | null>(null);
   // --- END: Local state ------------------------------------------------------
 
   // --- Refs ------------------------------------------------------------------
@@ -32,8 +35,9 @@ const AddTicketForm = ({
   // --- END: Side effects -----------------------------------------------------
 
   // --- Data and handlers -----------------------------------------------------
-  const handleSelect = (e) => {
-    setOption(e);
+  const handleSelect = (newValue: SingleValue<TOption | null>) => {
+    console.log(newValue);
+    setOption(newValue);
   };
 
   const handleFetch = async () => {
@@ -46,8 +50,7 @@ const AddTicketForm = ({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-
-    onSubmit(option.value);
+    onSubmit(option?.value as ITicket);
   };
   // --- END: Data and handlers ------------------------------------------------
 

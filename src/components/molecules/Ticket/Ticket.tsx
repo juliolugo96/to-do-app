@@ -1,15 +1,10 @@
 import React from "react";
 import { useSortable } from "@dnd-kit/sortable";
-
 import { CSS } from "@dnd-kit/utilities";
 import Image from "next/image";
-import { FaRegTrashCan } from "react-icons/fa6";
 import { TTicketProps } from "./types";
 
-const Ticket = ({
-  ticket,
-  onDeleteTicket: handleDeleteTicket,
-}: TTicketProps): React.ReactNode => {
+const Ticket = ({ ticket }: TTicketProps): React.ReactNode => {
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({ id: ticket.id });
 

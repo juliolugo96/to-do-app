@@ -1,12 +1,11 @@
 "use client";
 
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useState } from "react";
 import useWindowSize from "react-use/lib/useWindowSize";
 import Confetti from "react-confetti";
 import {
   DndContext,
   DragOverlay,
-  closestCorners,
   KeyboardSensor,
   PointerSensor,
   useSensor,
@@ -14,6 +13,8 @@ import {
   DragEndEvent,
   DragOverEvent,
   DragStartEvent,
+  Over,
+  closestCenter,
 } from "@dnd-kit/core";
 import { arrayMove, sortableKeyboardCoordinates } from "@dnd-kit/sortable";
 import Modal from "react-modal";
@@ -22,6 +23,7 @@ import AddTicketForm from "@/components/organisms/AddTicketForm";
 import Board from "@/components/organisms/Board";
 import Ticket from "@/components/molecules/Ticket";
 import AddItemButton from "@/components/atoms/AddItemButton";
+import { findTicketBoard } from "./functions";
 
 Modal.setAppElement("#app");
 
@@ -57,16 +59,6 @@ export default function BoardsContainer(): React.ReactNode {
 
   // --- Data and handlers -----------------------------------------------------
 
-  const findTicketBoard = (id: string): string | undefined => {
-    if (id in boards) return id;
-
-    const retVal: ITicket | undefined = Object.values(boards)
-      .flat()
-      .find((item) => item.id === id);
-
-    return retVal?.board;
-  };
-
   const handleDragStart = (e: DragStartEvent) => {
     const { active } = e;
     const { id } = active;
@@ -81,11 +73,11 @@ export default function BoardsContainer(): React.ReactNode {
   const handleDragOver = (e: DragOverEvent) => {
     const { active, over } = e;
     const { id } = active;
-    const { id: overId } = over;
+    const overId = String(over?.id);
 
     // Find the containers
-    const activeContainer: string = findTicketBoard(id) ?? "";
-    const overContainer: string = findTicketBoard(overId) ?? "";
+    const activeContainer: string = findTicketBoard(String(id), boards) ?? "";
+    const overContainer: string = findTicketBoard(overId, boards) ?? "";
 
     if (!activeContainer || !overContainer || activeContainer === overContainer)
       return;
@@ -106,6 +98,10 @@ export default function BoardsContainer(): React.ReactNode {
         // We're at the root droppable of a container
         newIndex = prev[overContainer].length + 1;
       } else {
+        console.log("Rect top, rect height:", {
+          top: over?.rect.top,
+          height: over?.rect.height,
+        });
         const isBelowLastItem =
           over &&
           active.rect.current.translated &&
@@ -124,7 +120,11 @@ export default function BoardsContainer(): React.ReactNode {
         ],
         [overContainer]: [
           ...prev[overContainer].slice(0, newIndex),
-          { ...boards[activeContainer][activeIndex], board: overContainer },
+          {
+            ...boards[activeContainer][activeIndex],
+            board: overContainer,
+            dragged: true,
+          },
           ...prev[overContainer].slice(newIndex, prev[overContainer].length),
         ],
       };
@@ -134,12 +134,12 @@ export default function BoardsContainer(): React.ReactNode {
   const handleDragEnd = (e: DragEndEvent) => {
     const { active, over } = e;
     const { id } = active;
-    const { id: overId } = over;
+    const overId = String(over?.id);
 
     if (id !== overId) {
       setBoards((boards) => {
-        const activeContainer = findTicketBoard(String(id)) ?? "";
-        const overContainer = findTicketBoard(overId) ?? "";
+        const activeContainer = findTicketBoard(String(id), boards) ?? "";
+        const overContainer = findTicketBoard(overId, boards) ?? "";
 
         const activeIndex = boards[activeContainer].findIndex(
           (item) => item.id === active.id
@@ -217,7 +217,7 @@ export default function BoardsContainer(): React.ReactNode {
       <div className="board-list-container grid grid-cols-1 md:grid-cols-3 gap-4">
         <DndContext
           sensors={sensors}
-          collisionDetection={closestCorners}
+          collisionDetection={closestCenter}
           onDragStart={handleDragStart}
           onDragOver={handleDragOver}
           onDragEnd={handleDragEnd}
