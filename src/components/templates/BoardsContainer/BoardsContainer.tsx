@@ -196,7 +196,9 @@ export default function BoardsContainer(): React.ReactNode {
 
   return (
     <>
-      {isExploding && <Confetti width={width} height={height} />}
+      {isExploding && (
+        <Confetti style={{ position: "fixed" }} width={width} height={height} />
+      )}
       <Modal
         isOpen={isOpenModal}
         onRequestClose={() => setIsOpenModal(false)}

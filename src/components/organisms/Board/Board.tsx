@@ -31,7 +31,7 @@ const Board = ({
         className="board w-full no-scrollbar min-h-screen md:min-h-0"
         style={style}
       >
-        <div className="board-title">{id}</div>
+        <div className="p-10 board-title">{id}</div>
         {items.map((ticket, idx) => (
           <Ticket
             key={ticket.id}

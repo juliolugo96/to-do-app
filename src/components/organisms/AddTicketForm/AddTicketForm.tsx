@@ -61,12 +61,12 @@ const AddTicketForm = ({
           width={500}
           alt="R&M"
         />
-        <div className="text-center m-auto w-full font-extrabold">
+        <div className="text-center text-lg m-auto w-full font-extrabold">
           {"Who will survive Season 8?"}
         </div>
       </div>
       <AsyncSelect
-        className="character-selector"
+        className="character-selector text-lg"
         cacheOptions
         loadOptions={handleFetch}
         defaultOptions
